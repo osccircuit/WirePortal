@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <object class="GtkWindow" id="dialog_window">
+    <property name="title">Приветствие</property>
+    <child>
+      <object class="GtkBox" id="dialog_box">
+        <property name="orientation">vertical</property>
+        <property name="spacing">10</property>
+        <child>
+          <object class="GtkLabel" id="label_greeting">
+            <property name="label">Здравствуйте!</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="close_button">
+            <property name="label">Закрыть</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
