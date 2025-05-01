@@ -12,22 +12,22 @@ class MainView:
         self.main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
         
         # ListBox for ConfFiles
-        self.listbox_confs = Gtk.ListBox()
-        self.listbox_confs.set_margin_top(10)
-        self.listbox_confs.set_margin_start(10)
-        self.listbox_confs.set_margin_end(10)
-        self.listbox_confs.set_vexpand(True)
-        self.listbox_confs.props.selection_mode = Gtk.SelectionMode.SINGLE
-        self.listbox_confs.props.show_separators = True
-        self.main_box.append(self.listbox_confs)
+        self.listbox_configs = Gtk.ListBox()
+        self.listbox_configs.set_margin_top(10)
+        self.listbox_configs.set_margin_start(10)
+        self.listbox_configs.set_margin_end(10)
+        self.listbox_configs.set_vexpand(True)
+        self.listbox_configs.props.selection_mode = Gtk.SelectionMode.SINGLE
+        self.listbox_configs.props.show_separators = True
+        self.main_box.append(self.listbox_configs)
 
-        # Button for add confs to list
-        self.button_list_confs = Gtk.Button(label='List Configs')
-        self.button_list_confs.set_valign(Gtk.Align.CENTER)
-        self.button_list_confs.set_halign(Gtk.Align.CENTER)
-        self.button_list_confs.set_margin_top(0)
-        self.button_list_confs.set_margin_bottom(10)
-        self.main_box.append(self.button_list_confs)
+        # Button for add configs to list
+        self.button_list_configs = Gtk.Button(label='List Configs')
+        self.button_list_configs.set_valign(Gtk.Align.CENTER)
+        self.button_list_configs.set_halign(Gtk.Align.CENTER)
+        self.button_list_configs.set_margin_top(0)
+        self.button_list_configs.set_margin_bottom(10)
+        self.main_box.append(self.button_list_configs)
 
         # Button to open connection
         self.button_open_connection = Gtk.Button(label='Open Connect')
@@ -57,13 +57,13 @@ class MainView:
      
     def get_signal_handlers(self):
         return {
-            "button_list_confs.clicked": self.on_list_confs_clicked,
+            "button_list_configs.clicked": self.on_list_configs_clicked,
             "button_open_connection.clicked": self.on_open_connection_clicked
         }
 
-    def on_list_confs_clicked(self, button_list_confs):
+    def on_list_configs_clicked(self, button_list_configs):
         self.check_presenter()
-        self.presenter.handle_list_confs()
+        self.presenter.handle_list_configs()
     
     def on_open_connection_clicked(self, button_open_connection):
         self.check_presenter()
@@ -78,7 +78,7 @@ class MainView:
             button.set_sensitive(True)
 
     def clear_list(self):
-        self.listbox_confs.remove_all()
+        self.listbox_configs.remove_all()
 
     def add_list_items(self, conf_files):
         self.clear_list()
@@ -90,7 +90,7 @@ class MainView:
                 box.set_halign(Gtk.Align.START)
                 row.set_child(box)
                 box.append(Gtk.Label(label=conf_file))
-                self.listbox_confs.append(row)
+                self.listbox_configs.append(row)
             self.button_enable(self.button_open_connection)
         except Exception:
             self.button_disable(self.button_open_connection)

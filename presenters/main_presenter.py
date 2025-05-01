@@ -9,8 +9,8 @@ class MainPresenter:
         self.view = view
         self.view.presenter = self
 
-    def handle_list_confs(self):
-        self.view.add_list_items(self.model.get_preety_confs())
+    def handle_list_configs(self):
+        self.view.add_list_items(self.model.get_preety_configs())
 
     def handle_open_connection(self):
-        self.model.run_wg_command()
+        self.model.run_connect_command()
