@@ -27,6 +27,16 @@ class MainView:
         self.button_list_confs.set_margin_bottom(10)
         self.main_box.append(self.button_list_confs)
 
+        # Button to open connection
+        self.button_open_connection = Gtk.Button(label='Open Connect')
+        self.button_open_connection.set_valign(Gtk.Align.START)
+        self.button_open_connection.set_halign(Gtk.Align.CENTER)
+        self.button_open_connection.set_margin_top(0)
+        self.button_open_connection.set_margin_bottom(10)
+        self.button_open_connection.set_sensitive(False)
+        self.main_box.append(self.button_open_connection)
+        
+
         self.window.set_child(self.main_box)
 
         for sig, handler in self.get_signal_handlers().items():
@@ -49,6 +59,14 @@ class MainView:
         if presenter:
             presenter.handle_list_confs()
 
+    def button_disable(self, button):
+        if button.is_sensitive():
+            button.set_sensitive(False)
+
+    def button_enable(self, button):
+        if not button.is_sensitive():
+            button.set_sensitive(True)
+
     def clear_list(self):
         self.listbox_confs.remove_all()
 
@@ -62,3 +80,4 @@ class MainView:
             label = Gtk.Label(label=conf_file)
             box.append(label)
         self.listbox_confs.append(row)
+        self.button_enable(self.button_open_connection)
