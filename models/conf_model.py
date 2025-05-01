@@ -12,7 +12,7 @@ class ConfModel:
 
     def run_wg_command(self):
         result = subprocess.run(
-            ['pkexec', 'ls', '/home/circuit/code_projects'],
+            ['pkexec', 'ls', '/home/osc_circuit/Documents/CodeProjects'],
             capture_output=True,
             text=True
         )

@@ -82,12 +82,15 @@ class MainView:
 
     def add_list_items(self, conf_files):
         self.clear_list()
-        row = Gtk.ListBoxRow()
-        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        box.set_halign(Gtk.Align.START)
-        row.set_child(box)
-        for conf_file in conf_files:
-            label = Gtk.Label(label=conf_file)
-            box.append(label)
-        self.listbox_confs.append(row)
-        self.button_enable(self.button_open_connection)
+        try:
+            if len(conf_files) == 0: raise Exception
+            for conf_file in conf_files:
+                row = Gtk.ListBoxRow()
+                box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+                box.set_halign(Gtk.Align.START)
+                row.set_child(box)
+                box.append(Gtk.Label(label=conf_file))
+                self.listbox_confs.append(row)
+            self.button_enable(self.button_open_connection)
+        except Exception:
+            self.button_disable(self.button_open_connection)
