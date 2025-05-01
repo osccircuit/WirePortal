@@ -1,23 +1,46 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Cambalache 0.96.0 -->
 <interface>
-  <requires lib="gtk" version="4.0"/>
+  <!-- interface-name main_window.ui -->
+  <!-- interface-copyright The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software. -->
+  <!-- interface-authors Egor Popov -->
+  <requires lib="gtk" version="4.18"/>
   <object class="GtkWindow" id="main_window">
-    <property name="title">Главное окно</property>
+    <property name="default-height">400</property>
+    <property name="default-width">600</property>
+    <property name="title">WirePortal</property>
     <child>
-      <object class="GtkBox" id="main_box">
+      <object class="GtkBox">
+        <property name="baseline-position">top</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">10</property>
         <child>
-          <object class="GtkEntry" id="entry_name">
-            <property name="placeholder_text">Введите ваше имя</property>
+          <object class="GtkTreeView" id="treeview1">
+            <property name="expander-column">
+              <object class="GtkTreeViewColumn">
+                <child>
+                  <object class="GtkCellRendererText" id="cellrenderertext1">
+                    <property name="text">0</property>
+                  </object>
+                </child>
+              </object>
+            </property>
+            <property name="headers-visible">False</property>
+            <property name="model">liststore1</property>
           </object>
         </child>
         <child>
-          <object class="GtkButton" id="greet_button">
-            <property name="label">Поздороваться</property>
+          <object class="GtkButton">
+            <property name="halign">center</property>
+            <property name="label">List Configs</property>
           </object>
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkListStore" id="liststore1">
+    <columns>
+      <column type="gchararray"/>
+    </columns>
   </object>
 </interface>
