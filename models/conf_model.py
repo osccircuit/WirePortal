@@ -1,4 +1,5 @@
 import os
+import subprocess
 
 class ConfModel:
     
@@ -8,6 +9,14 @@ class ConfModel:
 
     def detect_confs(self):
         return os.listdir(self.path)
+
+    def run_wg_command(self):
+        result = subprocess.run(
+            ['pkexec', 'ls', '/home/circuit/code_projects'],
+            capture_output=True,
+            text=True
+        )
+        print(result.stdout)
 
     def get_preety_confs(self):
         return self.confs

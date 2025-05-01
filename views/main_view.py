@@ -2,6 +2,8 @@ from gi.repository import Gtk
 
 class MainView:
     def __init__(self):
+        self.presenter = None
+
         self.window = Gtk.Window(title='WirePortal')
         self.window.set_default_size(400, 200)
         self.window.set_size_request(400, 200)
@@ -49,15 +51,23 @@ class MainView:
         self.window.set_application(app)
         self.window.present()
     
+    def check_presenter(self):
+        if self.presenter is not None: return
+        self.presenter = getattr(self, 'presenter', None)
+     
     def get_signal_handlers(self):
         return {
-            "button_list_confs.clicked": self.on_list_confs_clicked
+            "button_list_confs.clicked": self.on_list_confs_clicked,
+            "button_open_connection.clicked": self.on_open_connection_clicked
         }
 
     def on_list_confs_clicked(self, button_list_confs):
-        presenter = getattr(self, "presenter", None)
-        if presenter:
-            presenter.handle_list_confs()
+        self.check_presenter()
+        self.presenter.handle_list_confs()
+    
+    def on_open_connection_clicked(self, button_open_connection):
+        self.check_presenter()
+        self.presenter.handle_open_connection()
 
     def button_disable(self, button):
         if button.is_sensitive():
