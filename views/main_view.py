@@ -30,7 +30,7 @@ class MainView:
         self.main_box.append(self.button_list_configs)
 
         # Button to open connection
-        self.button_open_connection = Gtk.Button(label='Open Connect')
+        self.button_open_connection = Gtk.Button(label='Open Connection')
         self.button_open_connection.set_valign(Gtk.Align.START)
         self.button_open_connection.set_halign(Gtk.Align.CENTER)
         self.button_open_connection.set_margin_top(0)
@@ -67,7 +67,13 @@ class MainView:
     
     def on_open_connection_clicked(self, button_open_connection):
         self.check_presenter()
-        self.presenter.handle_open_connection()
+        try:
+            result_process = self.presenter.handle_open_connection(
+                self.get_en_label_from_listbox(self.listbox_configs))
+            if not result_process['status_text']: return
+            self.button_open_connection.set_label(result_process['status_text'])
+        except Exception as e:
+            print(e)
 
     def button_disable(self, button):
         if button.is_sensitive():
@@ -76,6 +82,14 @@ class MainView:
     def button_enable(self, button):
         if not button.is_sensitive():
             button.set_sensitive(True)
+    
+    def get_en_label_from_listbox(self, listbox):
+        try:
+            selected_row = listbox.get_selected_row()
+            if selected_row is None: raise Exception
+            return (selected_row.get_child().get_first_child().get_text())
+        except Exception:
+            raise Exception('Row config doesn\'t selected')
 
     def clear_list(self):
         self.listbox_configs.remove_all()

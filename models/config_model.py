@@ -10,14 +10,18 @@ class ConfigModel:
     def detect_configs(self):
         return os.listdir(self.path)
 
-    def run_connect_command(self):
-        result = subprocess.run(
-            ['pkexec', 'ls', '/home/osc_circuit/Documents/CodeProjects'],
-            check=True,
-            capture_output=True,
-            text=True
-        )
-        print(result.stdout)
+    def run_connect_command(self, config_file):
+        # result = subprocess.run(
+        #     ['pkexec', 'ls', '/home/osc_circuit/Documents/CodeProjects'],
+        #     check=True,
+        #     capture_output=True,
+        #     text=True
+        # )
+        # print(result.stdout)
+        print(f'Select Config -- {config_file}')
+        response = {'status': 'connect',
+                    'message': 'Connection has been created'}
+        return response
 
     def get_preety_configs(self):
         return self.configs

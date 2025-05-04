@@ -12,5 +12,10 @@ class MainPresenter:
     def handle_list_configs(self):
         self.view.add_list_items(self.model.get_preety_configs())
 
-    def handle_open_connection(self):
-        self.model.run_connect_command()
+    def handle_open_connection(self, selected_config):
+        response = self.model.run_connect_command(selected_config)
+        if response['status'] == 'connect':
+            response['status_text'] = 'Close Connection'
+        else:
+            response['status_text'] = 'Open Connection'
+        return response
