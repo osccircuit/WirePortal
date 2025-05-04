@@ -30,7 +30,10 @@ class MainView:
         self.main_box.append(self.button_list_configs)
 
         # Button to open connection
-        self.button_open_connection = Gtk.Button(label='Open Connection')
+        self.open_connection_button_text = 'Open Connection'
+        self.close_connection_button_text = 'Close Connection'
+        self.button_open_connection = Gtk.Button(
+                                      label=self.open_connection_button_text)
         self.button_open_connection.set_valign(Gtk.Align.START)
         self.button_open_connection.set_halign(Gtk.Align.CENTER)
         self.button_open_connection.set_margin_top(0)
@@ -58,20 +61,24 @@ class MainView:
     def get_signal_handlers(self):
         return {
             "button_list_configs.clicked": self.on_list_configs_clicked,
-            "button_open_connection.clicked": self.on_open_connection_clicked
+            "button_open_connection.clicked": self.on_close_open_connection_clicked
         }
 
     def on_list_configs_clicked(self, button_list_configs):
         self.check_presenter()
         self.presenter.handle_list_configs()
     
-    def on_open_connection_clicked(self, button_open_connection):
+    def on_close_open_connection_clicked(self, button_open_connection):
         self.check_presenter()
         try:
-            result_process = self.presenter.handle_open_connection(
-                self.get_en_label_from_listbox(self.listbox_configs))
-            if not result_process['status_text']: return
-            self.button_open_connection.set_label(result_process['status_text'])
+            if self.button_open_connection.get_label() == self.open_connection_button_text:
+                result_process = self.presenter.handle_open_connection(
+                    self.get_en_label_from_listbox(self.listbox_configs))
+                self.button_open_connection.set_label(self.close_connection_button_text)
+            elif self.button_open_connection.get_label() == self.close_connection_button_text:
+                result_process = self.presenter.handle_close_connection()
+                self.button_open_connection.set_label(self.open_connection_button_text)
+            print(result_process['message'])
         except Exception as e:
             print(e)
 
