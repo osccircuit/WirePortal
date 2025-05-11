@@ -41,6 +41,10 @@ class MainView:
         self.button_open_connection.set_sensitive(False)
         self.main_box.append(self.button_open_connection)
         
+        # Status Bar (ActionBar)
+        self.status_bar = Gtk.ActionBar()
+        self.status_bar.pack_start(Gtk.Label(label='Void'))
+        self.main_box.append(self.status_bar)
 
         self.window.set_child(self.main_box)
 
