@@ -1,13 +1,11 @@
 from gi.repository import Gtk
-
-
 class MainView:
     def __init__(self):
         self.presenter = None
 
         self.window = Gtk.Window(title="WirePortal")
-        self.window.set_default_size(400, 200)
-        self.window.set_size_request(400, 200)
+        self.window.set_default_size(400, 250)
+        self.window.set_size_request(400, 250)
 
         # Main Container
         self.main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
@@ -20,7 +18,9 @@ class MainView:
         self.listbox_configs.set_vexpand(True)
         self.listbox_configs.props.selection_mode = Gtk.SelectionMode.SINGLE
         self.listbox_configs.props.show_separators = True
-        self.main_box.append(self.listbox_configs)
+        self.scrolled = Gtk.ScrolledWindow(kinetic_scrolling=False)
+        self.scrolled.set_child(self.listbox_configs)
+        self.main_box.append(self.scrolled)
 
         # Button for add configs to list
         self.button_list_configs = Gtk.Button(label="List Configs")
@@ -117,6 +117,10 @@ class MainView:
 
     def clear_list(self):
         self.listbox_configs.remove_all()
+
+    def create_list_scroll_bar(self):
+        pass
+        # self.listbox_configs.
 
     def add_list_items(self, conf_files):
         self.clear_list()
