@@ -61,7 +61,8 @@ class MainView:
     def get_signal_handlers(self):
         return {
             "button_list_configs.clicked": self.on_list_configs_clicked,
-            "button_open_connection.clicked": self.on_close_open_connection_clicked
+            "button_open_connection.clicked": self.on_close_open_connection_clicked,
+            "listbox_configs.selected_rows_changed": self.on_list_configs_change_selected
         }
 
     def on_list_configs_clicked(self, button_list_configs):
@@ -81,6 +82,9 @@ class MainView:
             print(result_process['message'])
         except Exception as e:
             print(e)
+
+    def on_list_configs_change_selected(self, list_configs):
+        self.button_enable(self.button_open_connection)
 
     def button_disable(self, button):
         if button.is_sensitive():
@@ -112,6 +116,7 @@ class MainView:
                 row.set_child(box)
                 box.append(Gtk.Label(label=conf_file))
                 self.listbox_configs.append(row)
-            self.button_enable(self.button_open_connection)
+            if self.listbox_configs.get_selected_row() is not None:
+                self.button_enable(self.button_open_connection)
         except Exception:
             self.button_disable(self.button_open_connection)

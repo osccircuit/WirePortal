@@ -12,12 +12,14 @@ class ConfigModel:
         return os.listdir(self.path)
 
     def run_connect_command(self, config_file):
-        # result = subprocess.run(
-        #     ['pkexec', 'ls', '/home/osc_circuit/Documents/CodeProjects'],
-        #     check=True,
-        #     capture_output=True,
-        #     text=True
-        # )
+        result = subprocess.run(
+            ['pkexec', 'ls', '/home/osc_circuit/Documents/CodeProjects'],
+            # check=True,
+            stderr=subprocess.DEVNULL,  # Полное игнорирование stderr
+            stdout=subprocess.PIPE,     # Если нужно перехватить stdout
+            # capture_output=True,
+            text=True
+        )
         # print(result.stdout)
         self.current_use_config = config_file
         response = {'status': 'connect',
