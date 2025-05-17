@@ -38,6 +38,14 @@ class MainView:
         self.button_open_connection.set_sensitive(False)
         self.button_open_connection.set_size_request(250, 30)
 
+        # Speed Label 
+        self.speed_label = Gtk.Label(label='Speed: No Connection')
+
+        # Status Bar (ActionBar)
+        self.status_bar = Gtk.ActionBar()
+        self.status_bar.pack_start(Gtk.Label(label="Void"))
+
+        # Layout all elements
         self.control_box = Gtk.Box(spacing=10)
         self.control_box.set_margin_start(10)
         self.control_box.set_margin_end(10)
@@ -50,15 +58,12 @@ class MainView:
                             self.button_list_configs,
                             Gtk.PositionType.BOTTOM,
                             1, 1)
-        
+
         self.control_box.append(self.control_v_grid)
         self.main_box.append(self.control_box)
-        
-        # Status Bar (ActionBar)
-        self.status_bar = Gtk.ActionBar()
-        self.status_bar.pack_start(Gtk.Label(label="Void"))
+        self.main_box.append(self.speed_label)
         self.main_box.append(self.status_bar)
-
+        
         self.window.set_child(self.main_box)
 
         for sig, handler in self.get_signal_handlers().items():
