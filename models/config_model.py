@@ -9,7 +9,8 @@ class ConfigModel:
         self.current_use_config = None
 
     def detect_configs(self):
-        return os.listdir(self.path)
+        return list(map(lambda file: file.removesuffix('.conf'),
+                        os.listdir(self.path)))
 
     def run_connect_command(self, config_file):
         result = subprocess.run(
