@@ -4,8 +4,8 @@ class MainView:
         self.presenter = None
 
         self.window = Gtk.Window(title="WirePortal")
-        self.window.set_default_size(400, 250)
-        self.window.set_size_request(400, 250)
+        self.window.set_default_size(800, 250)
+        self.window.set_size_request(800, 250)
 
         # Main Container
         self.main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
@@ -20,12 +20,13 @@ class MainView:
         self.listbox_configs.props.selection_mode = Gtk.SelectionMode.SINGLE
         self.listbox_configs.props.show_separators = True
         self.scrolled = Gtk.ScrolledWindow(kinetic_scrolling=False)
+        self.scrolled.set_child(self.listbox_configs)
 
         # Button for add configs to list
         self.button_list_configs = Gtk.Button(label="List Configs")
         self.button_list_configs.set_valign(Gtk.Align.CENTER)
         self.button_list_configs.set_halign(Gtk.Align.CENTER)
-        self.button_list_configs.set_size_request(150, 30)
+        self.button_list_configs.set_size_request(250, 30)
 
         # Button to open connection
         self.open_connection_button_text = "Open Connection"
@@ -35,7 +36,7 @@ class MainView:
         self.button_open_connection.set_valign(Gtk.Align.START)
         self.button_open_connection.set_halign(Gtk.Align.CENTER)
         self.button_open_connection.set_sensitive(False)
-        self.button_open_connection.set_size_request(150, 30)
+        self.button_open_connection.set_size_request(250, 30)
 
         self.control_box = Gtk.Box(spacing=10)
         self.control_box.set_margin_start(10)
@@ -85,6 +86,7 @@ class MainView:
     def on_list_configs_clicked(self, button_list_configs):
         self.check_presenter()
         self.presenter.handle_list_configs()
+        # self.update_status_bar('Scaned Config Directory')
 
     def on_close_open_connection_clicked(self, button_open_connection):
         self.check_presenter()
