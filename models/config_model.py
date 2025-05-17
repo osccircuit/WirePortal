@@ -1,16 +1,20 @@
-import os
 import subprocess
+from pathlib import Path
 
 class ConfigModel:
     
     def __init__(self):
         self.path = '/etc/wireguard'
+        self.extension = '.conf'
         self.configs = self.detect_configs()
         self.current_use_config = None
 
     def detect_configs(self):
-        return list(map(lambda file: file.removesuffix('.conf'),
-                        os.listdir(self.path)))
+        files = [str(file.name) \
+                 for file in Path(self.path).glob(f'*{self.extension}') \
+                 if file.is_file()]
+        return list(map(lambda file: file.removesuffix(self.extension),
+                        files))
 
     def run_connect_command(self, config_file):
         result = subprocess.run(
