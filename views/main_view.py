@@ -13,34 +13,46 @@ class MainView:
         # ListBox for ConfFiles
         self.listbox_configs = Gtk.ListBox()
         self.listbox_configs.set_margin_top(10)
-        self.listbox_configs.set_margin_start(10)
-        self.listbox_configs.set_margin_end(10)
+        self.listbox_configs.set_margin_start(0)
+        self.listbox_configs.set_margin_end(0)
         self.listbox_configs.set_vexpand(True)
+        self.listbox_configs.set_hexpand(True)
         self.listbox_configs.props.selection_mode = Gtk.SelectionMode.SINGLE
         self.listbox_configs.props.show_separators = True
         self.scrolled = Gtk.ScrolledWindow(kinetic_scrolling=False)
-        self.scrolled.set_child(self.listbox_configs)
-        self.main_box.append(self.scrolled)
 
         # Button for add configs to list
         self.button_list_configs = Gtk.Button(label="List Configs")
         self.button_list_configs.set_valign(Gtk.Align.CENTER)
         self.button_list_configs.set_halign(Gtk.Align.CENTER)
-        self.button_list_configs.set_margin_top(0)
-        self.button_list_configs.set_margin_bottom(10)
-        self.main_box.append(self.button_list_configs)
+        self.button_list_configs.set_size_request(150, 30)
 
         # Button to open connection
         self.open_connection_button_text = "Open Connection"
         self.close_connection_button_text = "Close Connection"
-        self.button_open_connection = Gtk.Button(label=self.open_connection_button_text)
+        self.button_open_connection = Gtk.Button(
+            label=self.open_connection_button_text)
         self.button_open_connection.set_valign(Gtk.Align.START)
         self.button_open_connection.set_halign(Gtk.Align.CENTER)
-        self.button_open_connection.set_margin_top(0)
-        self.button_open_connection.set_margin_bottom(10)
         self.button_open_connection.set_sensitive(False)
-        self.main_box.append(self.button_open_connection)
+        self.button_open_connection.set_size_request(150, 30)
 
+        self.control_box = Gtk.Box(spacing=10)
+        self.control_box.set_margin_start(10)
+        self.control_box.set_margin_end(10)
+        self.control_box.append(self.scrolled)
+
+        self.control_v_grid = Gtk.Grid(row_spacing=10, margin_top=10)
+        self.control_v_grid.attach(self.button_list_configs, 0, 1, 1, 1)
+        self.control_v_grid.attach_next_to(
+                            self.button_open_connection, 
+                            self.button_list_configs,
+                            Gtk.PositionType.BOTTOM,
+                            1, 1)
+        
+        self.control_box.append(self.control_v_grid)
+        self.main_box.append(self.control_box)
+        
         # Status Bar (ActionBar)
         self.status_bar = Gtk.ActionBar()
         self.status_bar.pack_start(Gtk.Label(label="Void"))
@@ -84,13 +96,15 @@ class MainView:
                 result_process = self.presenter.handle_open_connection(
                     self.get_en_label_from_listbox(self.listbox_configs)
                 )
-                self.button_open_connection.set_label(self.close_connection_button_text)
+                self.button_open_connection.set_label(
+                    self.close_connection_button_text)
             elif (
                 self.button_open_connection.get_label()
                 == self.close_connection_button_text
             ):
                 result_process = self.presenter.handle_close_connection()
-                self.button_open_connection.set_label(self.open_connection_button_text)
+                self.button_open_connection.set_label(
+                    self.open_connection_button_text)
             self.update_status_bar(result_process["message"])
         except Exception as e:
             print(e)

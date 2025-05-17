@@ -28,7 +28,7 @@ class ConfigModel:
 
     def run_disconnect_command(self):
         response = {'status': 'disconnect',
-                    'message': 'Connection has been dispose by ' \
+                    'message': 'Connection has been closed by ' \
                                f'{self.current_use_config}',
                    }
         self.current_use_config = None
