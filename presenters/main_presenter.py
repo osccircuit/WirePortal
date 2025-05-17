@@ -10,10 +10,13 @@ class MainPresenter:
         self.view.presenter = self
 
     def handle_list_configs(self):
-        self.view.add_list_items(self.model.get_preety_configs())
+        self.view.add_list_items(self.model.config_model.get_preety_configs())
 
     def handle_open_connection(self, selected_config):
-        return self.model.run_connect_command(selected_config)
+        self.model.connection_model.set_config_file(selected_config)
+        return self.model.connection_model.open_connection()
+        # return self.model.run_connect_command(selected_config)
 
     def handle_close_connection(self):
-        return self.model.run_disconnect_command()
+        return self.model.connection_model.close_connection()
+        # return self.model.run_disconnect_command()

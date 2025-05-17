@@ -1,5 +1,5 @@
 from gi.repository import Gtk
-from models.config_model import ConfigModel
+from models.model import Model
 from views.main_view import MainView
 from presenters.main_presenter import MainPresenter
 
@@ -9,7 +9,7 @@ class MyApp(Gtk.Application):
 
     def do_activate(self):
         view = MainView()
-        model = ConfigModel()
+        model = Model()
         presenter = MainPresenter(model, view)
         view.show(self)
 

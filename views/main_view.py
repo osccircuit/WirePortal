@@ -45,7 +45,7 @@ class MainView:
         self.status_bar = Gtk.ActionBar()
         self.status_bar.pack_start(Gtk.Label(label="Void"))
 
-        # Layout all elements
+        # Add to container all elements
         self.control_box = Gtk.Box(spacing=10)
         self.control_box.set_margin_start(10)
         self.control_box.set_margin_end(10)
@@ -91,7 +91,7 @@ class MainView:
     def on_list_configs_clicked(self, button_list_configs):
         self.check_presenter()
         self.presenter.handle_list_configs()
-        # self.update_status_bar('Scaned Config Directory')
+        self.update_status_bar('Scaned Config Directory')
 
     def on_close_open_connection_clicked(self, button_open_connection):
         self.check_presenter()
