@@ -8,9 +8,67 @@ class MainView:
         self.app = None
         self.presenter = None
 
-        self.window = Gtk.Window(title="WirePortal")
-        self.window.set_default_size(800, 250)
-        self.window.set_size_request(800, 250)
+        # self.window = Gtk.Window(title="WirePortal")
+        self.window = Gtk.ApplicationWindow(title="WirePortal")
+        self.window.set_default_size(800, 350)
+        self.window.set_size_request(800, 350)
+
+        # MenuBar
+        self.menu_bar_actions = {}
+        # Menu_quit
+        action = Gio.SimpleAction.new("quit", None)
+        action.connect("activate", lambda a, p: self.app.quit())
+        self.window.add_action(action)
+        self.menu_bar_actions['quit'] = action
+        # Menu_RefreshConfs
+        action = Gio.SimpleAction.new("refresh_configs", None)
+        action.connect("activate", lambda a, p: self.on_list_configs_clicked(None))
+        self.window.add_action(action)
+        self.menu_bar_actions['refresh_configs'] = action
+        # Menu_Connect
+        action = Gio.SimpleAction.new("connect", None)
+        action.connect(
+            "activate", lambda a, p: self.connect()
+        )
+        self.window.add_action(action)
+        action.set_enabled(False)
+        self.menu_bar_actions['connect'] = action
+        # Menu_Disconnect
+        action = Gio.SimpleAction.new("disconnect", None)
+        action.connect(
+            "activate", lambda a, p: self.disconnect()
+        )
+        self.window.add_action(action)
+        action.set_enabled(False)
+        self.menu_bar_actions['disconnect'] = action
+        # Menu_About
+        action = Gio.SimpleAction.new("about", None)
+        action.connect("activate", lambda a, p: self.about_window())
+        self.window.add_action(action)
+        self.menu_bar_actions['about'] = action
+
+        self.header = Gtk.HeaderBar()
+        self.header.set_show_title_buttons(True)
+        self.menu_btn = Gtk.MenuButton(icon_name="open-menu", tooltip_text="Menu")
+        self.popover = Gtk.PopoverMenu()
+        self.menu_model = Gio.Menu()
+
+        self.menu_model = Gio.Menu()
+        self.section1 = Gio.Menu()
+        self.section1.append("Refresh Configs", "win.refresh_configs")
+        self.section1.append("Connect", "win.connect")
+        self.section1.append("Disconnect", "win.disconnect")
+
+        self.section2 = Gio.Menu()
+        self.section2.append("About", "win.about")
+        self.section2.append("Quit", "win.quit")
+
+        self.menu_model.append_section(None, self.section1)
+        self.menu_model.append_section(None, self.section2)
+        self.popover.set_menu_model(self.menu_model)
+        self.menu_btn.set_popover(self.popover)
+        self.header.pack_end(self.menu_btn)
+        self.window.set_titlebar(self.header)
 
         # Main Container
         self.main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
@@ -70,7 +128,7 @@ class MainView:
         self.control_box.append(self.control_v_grid)
         self.main_box.append(self.control_box)
         self.main_box.append(self.speed_label)
-        self.main_box.append(self.button)
+        # self.main_box.append(self.button)
         self.main_box.append(self.status_bar)
 
         self.window.set_child(self.main_box)
@@ -102,31 +160,48 @@ class MainView:
     def on_list_configs_clicked(self, button_list_configs):
         self.check_presenter()
         self.presenter.handle_list_configs()
+        self.button_disable(self.button_open_connection)
+        self.menu_bar_actions['connect'].set_enabled(False)
         self.update_status_bar("Scaned Config Directory")
 
     def on_close_open_connection_clicked(self, button_open_connection):
         self.check_presenter()
+        result_process = {}
         try:
             if (
                 self.button_open_connection.get_label()
                 == self.open_connection_button_text
             ):
-                result_process = self.presenter.handle_open_connection(
-                    self.get_en_label_from_listbox(self.listbox_configs)
-                )
-                self.button_open_connection.set_label(self.close_connection_button_text)
+                result_process = self.connect()
             elif (
                 self.button_open_connection.get_label()
                 == self.close_connection_button_text
             ):
-                result_process = self.presenter.handle_close_connection()
-                self.button_open_connection.set_label(self.open_connection_button_text)
+                result_process = self.disconnect()
             self.update_status_bar(result_process["message"])
         except Exception as e:
             print(e)
 
+    def connect(self):
+        result_process = self.presenter.handle_open_connection(
+            self.get_en_label_from_listbox(self.listbox_configs)
+        )
+        self.button_open_connection.set_label(self.close_connection_button_text)
+        self.menu_bar_actions['connect'].set_enabled(False)
+        self.menu_bar_actions['disconnect'].set_enabled(True)
+        return result_process
+
+    def disconnect(self):
+        result_process = self.presenter.handle_close_connection()
+        self.button_open_connection.set_label(self.open_connection_button_text)
+        self.menu_bar_actions['connect'].set_enabled(True)
+        self.menu_bar_actions['disconnect'].set_enabled(False)
+        return result_process
+
     def on_list_configs_change_selected(self, list_configs):
-        self.button_enable(self.button_open_connection)
+        if list_configs.get_selected_row() is not None:
+            self.button_enable(self.button_open_connection)
+            self.menu_bar_actions['connect'].set_enabled(True)
 
     def button_disable(self, button):
         if button.is_sensitive():
@@ -189,3 +264,6 @@ class MainView:
     #     self.app.send_notification(self.notification_id, notification)
     #     GLib.timeout_add_seconds(1, self.on_notify_clicked, button)
     #     return GLib.SOURCE_REMOVE  # Остановить повторение
+
+    def about_window(self):
+        self.update_speed_label("ABOUT CALLED")
