@@ -1,8 +1,11 @@
-from gi.repository import Gtk
+from gi.repository import Gtk, Gio, GLib
 
 
 class MainView:
     def __init__(self):
+        # self.notification_id = "dynamic-notification"
+
+        self.app = None
         self.presenter = None
 
         self.window = Gtk.Window(title="WirePortal")
@@ -42,6 +45,8 @@ class MainView:
         # Speed Label
         self.speed_label = Gtk.Label(label="Speed: No Connection")
 
+        # self.button = Gtk.Button(label="Send notification")
+
         # Status Bar (ActionBar)
         self.status_bar = Gtk.ActionBar()
         self.status_bar.pack_start(Gtk.Label(label="Void"))
@@ -65,6 +70,7 @@ class MainView:
         self.control_box.append(self.control_v_grid)
         self.main_box.append(self.control_box)
         self.main_box.append(self.speed_label)
+        self.main_box.append(self.button)
         self.main_box.append(self.status_bar)
 
         self.window.set_child(self.main_box)
@@ -76,6 +82,7 @@ class MainView:
                 obj.connect(signal_name, handler)
 
     def show(self, app):
+        self.app = app
         self.window.set_application(app)
         self.window.present()
 
@@ -89,6 +96,7 @@ class MainView:
             "button_list_configs.clicked": self.on_list_configs_clicked,
             "button_open_connection.clicked": self.on_close_open_connection_clicked,
             "listbox_configs.selected_rows_changed": self.on_list_configs_change_selected,
+            # "button.clicked": self.on_notify_clicked,
         }
 
     def on_list_configs_clicked(self, button_list_configs):
@@ -168,3 +176,16 @@ class MainView:
 
     def update_speed_label(self, speed):
         self.speed_label.set_label(f"Speed: {speed}")
+
+    # def on_notify_clicked(self, button):
+    #     notification = Gio.Notification.new("Hello")
+    #     notification.set_body(
+    #         f"Последнее обновление: {GLib.DateTime.new_now_local().format('%H:%M:%S')}"
+    #     )
+    #     notification.set_priority(Gio.NotificationPriority.HIGH)  # повысим приоритет
+    #     notification.add_button("Обновить", "app.update")
+    #     notification.add_button("Закрыть", "app.quit")
+    #     notification.set_icon(Gio.ThemedIcon.new("D23E_msiexec.0"))
+    #     self.app.send_notification(self.notification_id, notification)
+    #     GLib.timeout_add_seconds(1, self.on_notify_clicked, button)
+    #     return GLib.SOURCE_REMOVE  # Остановить повторение
