@@ -16,7 +16,15 @@ class ConnectionModel:
         self.general_connection_command = ["pkexec", "wg-quick"]
         self.open_command = "up"
         self.close_command = "down"
+        
+        self.connection_status = {
+            "status": "disconnect",
+            "message": "Disconnected ",
+        }
 
+    def get_connection_status(self):
+        return self.connection_status
+    
     def set_config_file(self, config_file):
         self.config_file = config_file
 
@@ -36,14 +44,13 @@ class ConnectionModel:
                 stdout=subprocess.PIPE,  # Если нужно перехватить stdout
                 text=True,
             )
-            # print(result.stdout)
-            response = {
+            self.connection_status = {
                 "status": "connect",
                 "message": "Connection has been " f"created by {self.config_file}",
             }
         except ConfigSetException as e:
-            response = {"status": "disconnect", "message": f"{e}"}
-        return response
+            self.connection_status = {"status": "disconnect", "message": f"{e}"}
+        return self.connection_status
 
     def close_connection(self):
         try:
@@ -56,13 +63,13 @@ class ConnectionModel:
                 stdout=subprocess.PIPE,  # Если нужно перехватить stdout
                 text=True,
             )
-            response = {
+            self.connection_status = {
                 "status": "disconnect",
                 "message": "Connection has been closed by " f"{self.config_file}",
             }
         except ConfigSetException as e:
-            response = {"status": "connect", "message": f"{e}"}
-        return response
+            self.connection_status = {"status": "connect", "message": f"{e}"}
+        return self.connection_status
 
     def speed_check(self):
         net1 = psutil.net_io_counters()

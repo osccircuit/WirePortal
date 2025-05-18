@@ -17,7 +17,7 @@ class MainView:
         self.menu_bar_actions = {}
         # Menu_quit
         action = Gio.SimpleAction.new("quit", None)
-        action.connect("activate", lambda a, p: self.app.quit())
+        action.connect("activate", lambda a, p: self.on_window_delete(None))
         self.window.add_action(action)
         self.menu_bar_actions['quit'] = action
         # Menu_RefreshConfs
@@ -86,7 +86,7 @@ class MainView:
         self.scrolled.set_child(self.listbox_configs)
 
         # Button for add configs to list
-        self.button_list_configs = Gtk.Button(label="List Configs")
+        self.button_list_configs = Gtk.Button(label="Refresh Configs")
         self.button_list_configs.set_valign(Gtk.Align.FILL)
         self.button_list_configs.set_halign(Gtk.Align.FILL)
         self.button_list_configs.set_vexpand(True)
@@ -154,6 +154,7 @@ class MainView:
             "button_list_configs.clicked": self.on_list_configs_clicked,
             "button_open_connection.clicked": self.on_close_open_connection_clicked,
             "listbox_configs.selected_rows_changed": self.on_list_configs_change_selected,
+            "window.close-request": self.on_window_delete,
             # "button.clicked": self.on_notify_clicked,
         }
 
@@ -166,37 +167,30 @@ class MainView:
 
     def on_close_open_connection_clicked(self, button_open_connection):
         self.check_presenter()
-        result_process = {}
-        try:
-            if (
-                self.button_open_connection.get_label()
-                == self.open_connection_button_text
-            ):
-                result_process = self.connect()
-            elif (
-                self.button_open_connection.get_label()
-                == self.close_connection_button_text
-            ):
-                result_process = self.disconnect()
-            self.update_status_bar(result_process["message"])
-        except Exception as e:
-            print(e)
+        if (
+            self.button_open_connection.get_label()
+            == self.open_connection_button_text
+        ):
+            self.connect()
+        elif (
+            self.button_open_connection.get_label()
+            == self.close_connection_button_text
+        ):
+            self.disconnect()
 
     def connect(self):
-        result_process = self.presenter.handle_open_connection(
+        self.presenter.handle_open_connection(
             self.get_en_label_from_listbox(self.listbox_configs)
         )
         self.button_open_connection.set_label(self.close_connection_button_text)
         self.menu_bar_actions['connect'].set_enabled(False)
         self.menu_bar_actions['disconnect'].set_enabled(True)
-        return result_process
 
     def disconnect(self):
-        result_process = self.presenter.handle_close_connection()
+        self.presenter.handle_close_connection()
         self.button_open_connection.set_label(self.open_connection_button_text)
         self.menu_bar_actions['connect'].set_enabled(True)
         self.menu_bar_actions['disconnect'].set_enabled(False)
-        return result_process
 
     def on_list_configs_change_selected(self, list_configs):
         if list_configs.get_selected_row() is not None:
@@ -267,3 +261,10 @@ class MainView:
 
     def about_window(self):
         self.update_speed_label("ABOUT CALLED")
+
+    def on_window_delete(self, window):
+        self.check_presenter()
+        self.presenter.handle_close_connection()
+        if self.app:
+            self.app.quit()
+        return False

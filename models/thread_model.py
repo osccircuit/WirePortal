@@ -15,6 +15,9 @@ class ThreadWorker:
 
     def set_thread_method(self, method):
         self.method_for_thread = method
+        
+    def get_status_run(self):
+        return self.is_running
 
     def run_loop(self):
         while not self.stop_event.is_set():
