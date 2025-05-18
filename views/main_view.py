@@ -1,4 +1,6 @@
 from gi.repository import Gtk
+
+
 class MainView:
     def __init__(self):
         self.presenter = None
@@ -26,20 +28,21 @@ class MainView:
         self.button_list_configs = Gtk.Button(label="List Configs")
         self.button_list_configs.set_valign(Gtk.Align.CENTER)
         self.button_list_configs.set_halign(Gtk.Align.CENTER)
-        self.button_list_configs.set_size_request(250, 30)
+        self.button_list_configs.set_vexpand(True)
+        self.button_list_configs.set_size_request(250, 80)
 
         # Button to open connection
         self.open_connection_button_text = "Open Connection"
         self.close_connection_button_text = "Close Connection"
-        self.button_open_connection = Gtk.Button(
-            label=self.open_connection_button_text)
+        self.button_open_connection = Gtk.Button(label=self.open_connection_button_text)
         self.button_open_connection.set_valign(Gtk.Align.START)
         self.button_open_connection.set_halign(Gtk.Align.CENTER)
         self.button_open_connection.set_sensitive(False)
-        self.button_open_connection.set_size_request(250, 30)
+        self.button_open_connection.set_vexpand(True)
+        self.button_open_connection.set_size_request(250, 80)
 
-        # Speed Label 
-        self.speed_label = Gtk.Label(label='Speed: No Connection')
+        # Speed Label
+        self.speed_label = Gtk.Label(label="Speed: No Connection")
 
         # Status Bar (ActionBar)
         self.status_bar = Gtk.ActionBar()
@@ -54,16 +57,18 @@ class MainView:
         self.control_v_grid = Gtk.Grid(row_spacing=10, margin_top=10)
         self.control_v_grid.attach(self.button_list_configs, 0, 1, 1, 1)
         self.control_v_grid.attach_next_to(
-                            self.button_open_connection, 
-                            self.button_list_configs,
-                            Gtk.PositionType.BOTTOM,
-                            1, 1)
+            self.button_open_connection,
+            self.button_list_configs,
+            Gtk.PositionType.BOTTOM,
+            1,
+            1,
+        )
 
         self.control_box.append(self.control_v_grid)
         self.main_box.append(self.control_box)
         self.main_box.append(self.speed_label)
         self.main_box.append(self.status_bar)
-        
+
         self.window.set_child(self.main_box)
 
         for sig, handler in self.get_signal_handlers().items():
@@ -91,7 +96,7 @@ class MainView:
     def on_list_configs_clicked(self, button_list_configs):
         self.check_presenter()
         self.presenter.handle_list_configs()
-        self.update_status_bar('Scaned Config Directory')
+        self.update_status_bar("Scaned Config Directory")
 
     def on_close_open_connection_clicked(self, button_open_connection):
         self.check_presenter()
@@ -103,15 +108,13 @@ class MainView:
                 result_process = self.presenter.handle_open_connection(
                     self.get_en_label_from_listbox(self.listbox_configs)
                 )
-                self.button_open_connection.set_label(
-                    self.close_connection_button_text)
+                self.button_open_connection.set_label(self.close_connection_button_text)
             elif (
                 self.button_open_connection.get_label()
                 == self.close_connection_button_text
             ):
                 result_process = self.presenter.handle_close_connection()
-                self.button_open_connection.set_label(
-                    self.open_connection_button_text)
+                self.button_open_connection.set_label(self.open_connection_button_text)
             self.update_status_bar(result_process["message"])
         except Exception as e:
             print(e)
@@ -161,10 +164,13 @@ class MainView:
             self.button_disable(self.button_open_connection)
 
     def update_status_bar(self, new_data):
-        start_box = self.status_bar.get_first_child() \
-                    .get_first_child().get_first_child()
-        end_box = self.status_bar.get_first_child() \
-                    .get_last_child().get_first_child()
+        start_box = (
+            self.status_bar.get_first_child().get_first_child().get_first_child()
+        )
+        end_box = self.status_bar.get_first_child().get_last_child().get_first_child()
         for child in start_box:
             self.status_bar.remove(child)
         self.status_bar.pack_start(Gtk.Label(label=str(new_data)))
+
+    def update_speed_label(self, speed):
+        self.speed_label.set_label(f"Speed: {speed}")
