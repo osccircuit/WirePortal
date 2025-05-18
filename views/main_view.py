@@ -26,20 +26,18 @@ class MainView:
 
         # Button for add configs to list
         self.button_list_configs = Gtk.Button(label="List Configs")
-        self.button_list_configs.set_valign(Gtk.Align.CENTER)
-        self.button_list_configs.set_halign(Gtk.Align.CENTER)
+        self.button_list_configs.set_valign(Gtk.Align.FILL)
+        self.button_list_configs.set_halign(Gtk.Align.FILL)
         self.button_list_configs.set_vexpand(True)
-        self.button_list_configs.set_size_request(250, 80)
 
         # Button to open connection
         self.open_connection_button_text = "Open Connection"
         self.close_connection_button_text = "Close Connection"
         self.button_open_connection = Gtk.Button(label=self.open_connection_button_text)
-        self.button_open_connection.set_valign(Gtk.Align.START)
-        self.button_open_connection.set_halign(Gtk.Align.CENTER)
+        self.button_open_connection.set_valign(Gtk.Align.FILL)
+        self.button_open_connection.set_halign(Gtk.Align.FILL)
         self.button_open_connection.set_sensitive(False)
         self.button_open_connection.set_vexpand(True)
-        self.button_open_connection.set_size_request(250, 80)
 
         # Speed Label
         self.speed_label = Gtk.Label(label="Speed: No Connection")
