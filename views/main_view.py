@@ -140,10 +140,6 @@ class MainView:
     def clear_list(self):
         self.listbox_configs.remove_all()
 
-    def create_list_scroll_bar(self):
-        pass
-        # self.listbox_configs.
-
     def add_list_items(self, conf_files):
         self.clear_list()
         try:
