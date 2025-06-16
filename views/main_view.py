@@ -1,6 +1,5 @@
 from gi.repository import Gtk, Gio, GLib
 
-
 class MainView:
     def __init__(self):
         # self.notification_id = "dynamic-notification"
@@ -260,7 +259,10 @@ class MainView:
     #     return GLib.SOURCE_REMOVE  # Остановить повторение
 
     def about_window(self):
-        self.update_speed_label("ABOUT CALLED")
+        # self.update_speed_label("ABOUT CALLED")
+        self.presenter.handle_greet()
+
+
 
     def on_window_delete(self, window):
         self.check_presenter()

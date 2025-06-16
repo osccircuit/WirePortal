@@ -1,3 +1,6 @@
+from views.dialog_view import DialogView
+from presenters.dialog_presenter import DialogPresenter
+
 class MainPresenter:
     def __init__(self, model, view):
         self.model = model
@@ -40,3 +43,10 @@ class MainPresenter:
     def handle_update_speed_label(self, speed):
         new_speed_format = " ".join(speed)
         self.view.update_speed_label(new_speed_format)
+
+    def handle_greet(self):
+        d_view = DialogView()
+        self.model.name = "Yegor"
+        d_presenter = DialogPresenter(model=self.model, view=d_view)
+
+        d_view.window.present()
